@@ -9,6 +9,7 @@ a comma-separated list of numbers. For each line, perform the specified operatio
 minimum, maximum and average respectively. Your program should handle errors, including malformed input, appropriately.
 Please provide the source code, automated tests, any additional data (e.g. buildscripts) or information
 (e.g. assumptions you've made, known bugs, etc) that you think we would need to fairly judge your submission.
+
 Sample execution:
 
         SUM: 1, 2, 3
