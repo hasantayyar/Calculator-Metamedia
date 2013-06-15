@@ -26,7 +26,7 @@ public class Calculator {
                 if (line.trim().isEmpty()) continue; // empty line, proceed next lines
                 int colonIndex = line.indexOf(":");
                 if (colonIndex == -1) {
-                    println("wrong operation format (" + line + ")");
+                    printMessageOnLine("wrong operation format", line);
                     continue; // proceed next lines
                 }
                 Operation operation;
