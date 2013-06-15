@@ -18,72 +18,72 @@ public class Calculator {
             return;
         }
         String fileName = args[0];
-        BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader(fileName));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                if (line.trim().isEmpty()) continue; // empty line, proceed next lines
-                int colonIndex = line.indexOf(":");
-                if (colonIndex == -1) {
-                    printMessageOnLine("wrong operation format", line);
-                    continue; // proceed next lines
-                }
-                Operation operation;
-                try {
-                    operation = Operation.valueOf(line.substring(0, colonIndex).trim());
-                } catch (IllegalArgumentException e) {
-                    printMessage("unknown operation");
-                    continue; // proceed next lines
-                }
-                String[] numbers = line.substring(colonIndex + 1).split(",");
-                if (numbers.length == 0) {
-                    printMessageOnLine("no operands", line);
-                    continue; // proceed next lines
-                }
-                AbstractCalc calc;
-                switch (operation) {
-                    case SUM:
-                        calc = new SumCalc();
-                        break;
-                    case MIN:
-                        calc = new MinCalc();
-                        break;
-                    case MAX:
-                        calc = new MaxCalc();
-                        break;
-                    case AVERAGE:
-                        calc = new AverageCalc();
-                        break;
-                    default:
-                        throw new IllegalArgumentException("unknown operation");
-                }
-                boolean malformed = false;
-                for (String singleNumber : numbers) {
-                    try {
-                        calc.addOperand(Integer.parseInt(singleNumber.trim()));
-                    } catch (NumberFormatException e) {
-                        printMessageOnLine("malformed number", line);
-                        malformed = true;
-                        break;
+            FileReader fileReader = new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            try {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    if (line.trim().isEmpty()) continue; // empty line, proceed next lines
+                    int colonIndex = line.indexOf(":");
+                    if (colonIndex == -1) {
+                        printMessageOnLine("wrong operation format", line);
+                        continue; // proceed next lines
                     }
+                    Operation operation;
+                    try {
+                        operation = Operation.valueOf(line.substring(0, colonIndex).trim());
+                    } catch (IllegalArgumentException e) {
+                        printMessage("unknown operation");
+                        continue; // proceed next lines
+                    }
+                    String[] numbers = line.substring(colonIndex + 1).split(",");
+                    if (numbers.length == 0) {
+                        printMessageOnLine("no operands", line);
+                        continue; // proceed next lines
+                    }
+                    AbstractCalc calc;
+                    switch (operation) {
+                        case SUM:
+                            calc = new SumCalc();
+                            break;
+                        case MIN:
+                            calc = new MinCalc();
+                            break;
+                        case MAX:
+                            calc = new MaxCalc();
+                            break;
+                        case AVERAGE:
+                            calc = new AverageCalc();
+                            break;
+                        default:
+                            throw new IllegalArgumentException("unknown operation");
+                    }
+                    boolean malformed = false;
+                    for (String singleNumber : numbers) {
+                        try {
+                            calc.addOperand(Integer.parseInt(singleNumber.trim()));
+                        } catch (NumberFormatException e) {
+                            printMessageOnLine("malformed number", line);
+                            malformed = true;
+                            break;
+                        }
+                    }
+                    if (malformed) continue; // proceed next lines
+                    println(line + " = " + calc.getResult());
                 }
-                if (malformed) continue; // proceed next lines
-                println(line + " = " + calc.getResult());
+            } catch (IOException e) {
+                printMessage("file reading failed");
+            } finally {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } catch (FileNotFoundException e) {
             printMessage("file not found");
             printUsage();
-        } catch (IOException e) {
-            printMessage("file reading failed");
-        } finally {
-            try {
-                if (bufferedReader != null) {
-                    bufferedReader.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
