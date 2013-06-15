@@ -59,10 +59,9 @@ public class Calculator {
                         throw new IllegalArgumentException("unknown operation");
                 }
                 boolean malformed = false;
-                for (int i = 0; i < numbers.length; i++) {
-                    String number = numbers[i].trim();
+                for (String singleNumber : numbers) {
                     try {
-                        calc.addOperand(Integer.parseInt(number));
+                        calc.addOperand(Integer.parseInt(singleNumber.trim()));
                     } catch (NumberFormatException e) {
                         printMessageOnLine("malformed number", line);
                         malformed = true;
